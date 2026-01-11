@@ -78,6 +78,12 @@
       {% include "partials/tabs.html" %}
     {% endif %}
   {% endif %}
+
+    <!-- Button to open search modal -->
+    <label class="md-header__button md-icon" for="__search">
+      {% set icon = config.theme.icon.search or "material/magnify" %}
+      {% include ".icons/" ~ icon ~ ".svg" %}
+    </label>
     <!-- Color palette toggle -->
     {% if config.theme.palette %}
       {% if not config.theme.palette is mapping %}
@@ -85,30 +91,13 @@
       {% endif %}
     {% endif %}
 
-    <!-- User preference: color palette -->
-    {% if not config.theme.palette is mapping %}
-      {% include "partials/javascripts/palette.html" %}
-    {% endif %}
+    <!-- Search interface -->
+    {% include "partials/search.html" %}
+
 
     <!-- Site language selector -->
     {% if config.extra.alternate %}
       {% include "partials/alternate.html" %}
-    {% endif %}
-
-    <!-- Button to open search modal -->
-    {% if "material/search" in config.plugins %}
-      {% set search = config.plugins["material/search"] | attr("config") %}
-
-      <!-- Check if search is actually enabled - see https://t.ly/DT_0V -->
-      {% if search.enabled %}
-        <label class="md-header__button md-icon" for="__search">
-          {% set icon = config.theme.icon.search or "material/magnify" %}
-          {% include ".icons/" ~ icon ~ ".svg" %}
-        </label>
-
-        <!-- Search interface -->
-        {% include "partials/search.html" %}
-      {% endif %}
     {% endif %}
 
     <!-- Repository information -->

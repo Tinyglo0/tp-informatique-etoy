@@ -71,9 +71,7 @@ theme:
 plugins:
   - awesome-pages:          # Pas indispensable, mais... (pip install mkdocs-awesome-pages-plugin)
       collapse_single_pages: true
-
   - search
-
   - pyodide_macros:         # !!REQUIS!!
       build:
         python_libs:
