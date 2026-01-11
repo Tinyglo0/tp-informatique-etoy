@@ -1,0 +1,11 @@
+.md-typeset h3 {
+  visibility: hidden;
+  position: absolute;
+  margin: -1em 0;
+  padding: 0;
+}
+
+.md-typeset .mermaid {
+  display: grid;
+  justify-items: center;
+}

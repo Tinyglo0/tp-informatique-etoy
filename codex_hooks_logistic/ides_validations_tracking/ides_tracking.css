@@ -1,0 +1,37 @@
+.ide_tracker_wrapper{
+  --dim: 18px;
+}
+.ide_tracker_wrapper .tooltip{ cursor:unset; }
+.ide_tracker_wrapper .tooltip > img {
+  text-shadow: unset;
+  box-shadow: unset;
+  border: unset;
+  left: 0px;
+  top: 0px;
+  width: var(--dim);
+  min-width: var(--dim);
+  border-radius: calc(var(--dim) / 3);
+  padding: calc(var(--dim) / 6);
+}
+
+.md-typeset div.parkour-wrapper {
+  position: relative;
+  margin-bottom: 2em;
+}
+div.parkour-inner-wrapper, div.parkour-inner-wrapper > .ide_tracker_wrapper {
+  pointer-events: none;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+div.parkour-inner-wrapper > .ide_tracker_wrapper {
+  pointer-events: auto;
+}
+
+.capytale-num{
+  width: 3em;
+}
+
+.md-typeset span.md-tag.n-evals {
+  font-weight: normal;
+}

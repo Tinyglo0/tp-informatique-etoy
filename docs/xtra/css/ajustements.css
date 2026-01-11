@@ -1,0 +1,30 @@
+/*
+  Bordures des blocs de code
+*/
+
+.highlight pre {
+    border: solid 1px #858585;
+}
+
+.highlight span.filename {
+    border: solid 1px #858585;
+    border-bottom: 0;
+}
+
+.highlight pre>span {
+    height: 0;
+}
+
+.highlighttable {
+    border: solid 1px #858585;
+}
+
+.highlighttable .linenos pre,
+.highlighttable .code pre {
+    border: none;
+}
+
+.highlighttable span.filename {
+    border: solid 0 #858585;
+    border-bottom-width: 1px;
+}

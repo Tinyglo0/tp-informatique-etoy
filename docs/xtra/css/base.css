@@ -1,0 +1,98 @@
+html {
+	height: 100%;
+	overflow-x: hidden;
+	font-size: 125%;
+}
+
+body {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	min-height: 100%;
+	font-size: px2rem(10px);
+	background-color: var(--md-default-bg-color);
+}
+
+@media print {
+	body {
+		display: block;
+	}
+}
+
+.md-grid {
+	max-width: px2rem(1220px);
+	margin-inline: auto;
+}
+
+.md-container {
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
+}
+
+@media print {
+	.md-container {
+		display: block;
+	}
+}
+
+.md-main {
+	flex-grow: 1;
+}
+
+.md-main__inner {
+	display: flex;
+	height: 100%;
+	margin-top: px2rem(30px);
+}
+
+.md-ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.md-toggle {
+	display: none;
+}
+
+.md-option {
+	position: absolute;
+	width: 0;
+	height: 0;
+	opacity: 0;
+}
+
+.md-option:checked + label:not([hidden]) {
+	display: block;
+}
+
+.md-option.focus-visible + label {
+	outline-style: auto;
+	outline-color: var(--md-accent-fg-color);
+}
+
+.md-skip {
+	position: fixed;
+	z-index: -1;
+	padding: px2rem(6px) px2rem(10px);
+	margin: px2rem(10px);
+	font-size: px2rem(12.8px);
+	color: var(--md-default-bg-color);
+	background-color: var(--md-default-fg-color);
+	border-radius: px2rem(2px);
+	outline-color: var(--md-accent-fg-color);
+	opacity: 0;
+	transform: translateY(px2rem(8px));
+}
+
+.md-skip:focus {
+	z-index: 10;
+	opacity: 1;
+	transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1), opacity 175ms 75ms;
+	transform: translateY(0);
+}
+
+@page {
+	margin: 25mm;
+}

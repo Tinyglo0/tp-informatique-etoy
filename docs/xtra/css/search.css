@@ -1,0 +1,54 @@
+@charset "UTF-8";
+
+:root {
+	--md-search-icon: svg-load("lucide/search.svg");
+}
+
+.md-search {
+	position: relative;
+}
+
+.no-js .md-search {
+	display: none;
+}
+
+.md-search__button {
+	position: relative;
+	padding-inline: px2rem(38px) px2rem(44px);
+	color: var(--md-default-fg-color);
+	background: var(--md-default-bg-color);
+	font-size: px2rem(14px);
+	text-align: left;
+	cursor: pointer;
+}
+
+.md-search__button::before {
+	position: absolute;
+	inset-inline-start: 0;
+	top: px2rem(6px);
+	margin-left: px2rem(10px);
+	width: px2rem(20px);
+	height: px2rem(20px);
+	content: "";
+	background-color: var(--md-default-fg-color);
+	mask-image: var(--md-search-icon);
+	mask-repeat: no-repeat;
+	mask-position: center;
+	mask-size: contain;
+}
+
+.md-search__button::after {
+	position: absolute;
+	top: px2rem(7px);
+	right: px2rem(12px);
+	display: block;
+	padding: px2rem(2px) px2rem(4px);
+	font-size: px2rem(12px);
+	content: "Ctrl+K";
+	background: var(--md-default-bg-color--light);
+	border-radius: px2rem(4px);
+}
+
+[data-platform^="Mac"] .md-search__button::after {
+	content: "⌘K";
+}

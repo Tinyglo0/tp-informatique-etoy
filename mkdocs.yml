@@ -1,0 +1,183 @@
+# Voici un exemple presque complet de configuration pour un fichier
+# mkdocs.yml utilisant pyodide-mkdocs-theme.
+
+site_url: "https://tp-informatique-etoy.pages.dev"
+site_name: "TP informatique pour le gymnase d'Etoy"
+# site_description: "(optionnel)"
+# repo_url: "(optionnel)"
+# edit_uri_template: "(optionnel)"
+
+# Copyright "CC BY-NC-SA"
+copyright: |
+  <p> Aurélien Saudemont - 2025</p>
+
+
+docs_dir: docs
+
+nav:
+  - "Accueil": index.md
+  - "1M" : 1M/tp-image
+  # - "Alien" : alien3/
+# - ...
+
+# Pour supprimer certains fichiers markdown de la navigation (pattern shell):
+# not_in_nav: |
+#   */**/*.md
+
+
+# exclude_docs: Nécessite mkdocs 1.6+ pour fonctionner correctement. Sinon, vous pouvez
+# utiliser le plugin mkdocs-exclude à la place.
+# Ne surtout pas mettre de commentaires sur la ligne d'exclusion des fichiers python... !
+# (exclure les fichiers python n'affecte pas les "python_libs")
+exclude_docs: |
+  **/*_REM.md
+  **/*.py
+
+
+# Configuration du thème:
+theme:
+  favicon: https://www.gymnase-etoy.ch/favicon.ico
+  logo: assets/logo-gnetoy.png
+  name: pyodide-mkdocs-theme
+  custom_dir: overrides
+  palette:
+    
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue grey
+      accent: blue grey
+      toggle:
+        icon: lucide/sun
+        name: Passer au mode sombre
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue grey
+      accent: blue grey
+      toggle:
+        icon: lucide/moon
+        name: Passer au mode jour
+
+    
+    
+  
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+#   - navigation.instant    # Ne surtout pas activer cette option !
+
+
+
+# Configuration minimale pour les plugins
+plugins:
+  - awesome-pages:          # Pas indispensable, mais... (pip install mkdocs-awesome-pages-plugin)
+      collapse_single_pages: true
+
+  - search
+
+  - pyodide_macros:         # !!REQUIS!!
+      build:
+        python_libs:
+          - alien_python
+          - turtle
+          - pixel_art
+        
+        # Configuration pour les macros avec indentation
+        macros_with_indents:
+          - alien_dessin
+          - alien_IDE
+          - double_IDE
+          - IDE_double
+          - IDE_versions
+          - remarque
+
+        # Configuration Pyodide
+        extra_pyodide_sections:
+          - dessin
+          - corr
+          - env
+          - tests
+          - checks
+          - grille
+          - ignore
+        
+        # Configuration des IDEs
+        ides_id_hash_mode: relative
+      testing:
+        include: site
+      module_name: macros
+      on_error_fail: true   # Fortement conseillé...
+
+# - exclude-search:         # APRÈS le plugin search (pip install mkdocs-exclude-search)
+#     exclude:              # Pour les fichiers inclus dans le build, que la recherche ne doit pas indexer
+#       - bac_a_sable.md
+
+
+markdown_extensions:
+
+  # Extensions indispensables pour le thème:
+  - md_in_html              # !!REQUIS!!
+  - admonition              # !!REQUIS!! Blocs colorés:  !!! info "ma remarque"
+  - attr_list               # !!REQUIS!! Un peu de CSS et des attributs HTML, ex: { #id .class style="display:none" }
+  - pymdownx.details        # !!REQUIS!! Admonition: ??? -> peuvent se déplier ; ???+ -> peuvent se replier.
+  - pymdownx.emoji:         # !!REQUIS!! Émojis:  :boom: (utilisé dans les terminaux)
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      options:
+        custom_icons:
+          - .icons
+  - pymdownx.highlight:      # !!REQUIS!! Coloration syntaxique du code
+      auto_title: true
+      auto_title_map:
+        "Python": "Script Python"
+        "Python Console Session": "Console Python"
+        "Text Only": "📋 Texte"
+        "E-mail": "📥 Entrée"
+        "Text Output": "📤 Sortie"
+  - pymdownx.inlinehilite   # !!REQUIS!! Coloration syntaxique pour les "code spans": `#!python  code_python`
+  - pymdownx.snippets:      # !!REQUIS!! Inclusion de fichiers externe.
+      check_paths: true     # Fortement conseillé !
+  - pymdownx.superfences:   # !!REQUIS!!
+      custom_fences:        # (custom_fences: uniquement si vous comptez utiliser mermaid)
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.arithmatex:    # !!REQUIS!! Pour LaTex
+      generic: true
+  - pymdownx.striphtml:
+      strip_js_on_attributes: false     # !!REQUIS!!
+      strip_attributes: ""              # !!REQUIS!!
+
+  # Extensions conseillées:
+  - abbr
+  - def_list                # Les listes de définition.
+  - footnotes               # Notes[^1] de bas de page.  [^1]: ma note.
+  - pymdownx.caret          # Passage ^^souligné^^ ou en ^exposant^.
+  - pymdownx.mark           # Passage ==surligné==.
+  - pymdownx.tilde          # Passage ~~barré~~ ou en ~indice~.
+  - pymdownx.keys           # Touches du clavier:  ++ctrl+d++
+  - pymdownx.tasklist:      # Cases à cocher  - [ ]  et - [x]
+      custom_checkbox: false
+      clickable_checkbox: true
+  - pymdownx.tabbed:        # Volets glissants:  === "Mon volet"
+      alternate_style: true # Meilleure compatibilité pour mobiles
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  # - toc:
+  #     toc_depth: 0        # Si vous voulez supprimer la ToC (table of content) des pages
+
+
+extra_javascript:
+  - xtra/javascripts/alienCodEx.js
+extra_css:
+  - xtra/css/ajustements.css
+#   - xtra/css/base.css
+#   - xtra/css/header.css
+#   - xtra/css/search.css
+
+
+# Si mkdocs est lancé en mode strict (mkdocs ... --strict), les warnings lèveront une erreur
+# en utilisant ces réglages :
+validation:
+  omitted_files: warn
+  unrecognized_links: warn
