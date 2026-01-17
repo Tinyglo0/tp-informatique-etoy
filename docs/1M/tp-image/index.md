@@ -71,7 +71,7 @@ Nous allons pour ceci procéder par étape en répondant aux questions suivantes
 
 
 ??? question "Question 3"
-    ```python { .inline .end .w45 }
+    ```python { .inlinee .end .w45 }
     # image de 3 lignes de 11 colonnes
     creer_image(11, 3)
 
@@ -131,7 +131,7 @@ Nous allons pour ceci procéder par étape en répondant aux questions suivantes
 
 ??? question "Question 5"
     cliquer sur les pixels à colorier en vert :
-    ```python { .inline .end .w45 }
+    ```python { .inlinee .end .w45 }
     NB_COLONNES = 11
     ligne_5 = [BLANC, BLANC, VERT, VERT, VERT, VERT, VERT, VERT, VERT, BLANC, BLANC]
     for x in range(NB_COLONNES):
@@ -166,7 +166,7 @@ Nous allons pour ceci procéder par étape en répondant aux questions suivantes
 
 ??? question "Question 7"
     Cliquer sur les pixels à colorier en bleu :
-    ```python { .inline .end .w45 }
+    ```python { .inlinee .end}
     NB_LIGNES = 6
     NB_COLONNES = 9
     image = [[BLANC, BLANC, BLANC, BLEU, BLANC, BLEU, BLANC, BLANC, BLANC],

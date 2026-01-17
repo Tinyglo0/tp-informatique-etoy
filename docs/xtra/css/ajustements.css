@@ -13,6 +13,7 @@
 
 .highlight pre>span {
     height: 0;
+    width: auto;
 }
 
 .highlighttable {
@@ -27,4 +28,11 @@
 .highlighttable span.filename {
     border: solid 0 #858585;
     border-bottom-width: 1px;
+}
+.inlinee{
+    margin-bottom:.8rem;
+    margin-top:0;
+    float: right;
+    margin-left: auto;
+    margin-left: 1.5em;
 }
