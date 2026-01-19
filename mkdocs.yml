@@ -9,7 +9,7 @@ site_name: "TP informatique pour le gymnase d'Etoy"
 
 # Copyright "CC BY-NC-SA"
 copyright: |
-  <p> Aurélien Saudemont - 2025</p>
+  <p> Aurélien Saudemont - <script>document.write(new Date().getFullYear())</script></p>
 
 
 docs_dir: docs
