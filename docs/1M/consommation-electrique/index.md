@@ -24,7 +24,7 @@ On souhaite calculer l'énergie consommée par un appareil électrique à l'aide
 
     {{ remarque('assertion') }}
 
-    {{IDE('exo1')}}
+    {{IDE('exo1', MAX=1000)}}
 
 ??? question "Energie consommée"
 
@@ -40,7 +40,7 @@ On souhaite calculer l'énergie consommée par un appareil électrique à l'aide
     6900.0
     ```
 
-    {{IDE('exo2')}}
+    {{IDE('exo2', MAX=1000)}}
 
 ??? question "Coût d'utilisation"
 
@@ -62,7 +62,7 @@ On souhaite calculer l'énergie consommée par un appareil électrique à l'aide
     4.524
     ```
 
-    {{IDE('exo3')}}
+    {{IDE('exo3', MAX=1000)}}
 
 
 ??? question "Coût de la consommation"
@@ -87,5 +87,5 @@ On souhaite calculer l'énergie consommée par un appareil électrique à l'aide
         Attentions aux unités utilisées : $1 \text{kWh} = 1\,000 {Wh}$
 
 
-    {{ IDE('exo4',STD_KEY="1234") }}
+    {{ IDE('exo4',STD_KEY="1234", MAX=1000) }}
 

@@ -1,0 +1,71 @@
+/* Style des cartes type NSI */
+.md-typeset .grid.cards > ul > li {
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 8px;
+    padding: 1.2rem;
+    transition: all 0.3s ease;
+    background: var(--md-default-bg-color);
+    box-shadow: 0 1.5px 3px 0 #00000026;
+    background: #f9f9f9;
+    
+}
+
+.md-typeset .grid.cards > ul > li:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    border-color: var(--md-accent-fg-color);
+}
+
+/* Icônes dans les cartes */
+.md-typeset .grid.cards > ul > li .lg {
+    font-size: 3rem;
+}
+
+.md-typeset .grid.cards > ul > li .middle {
+    vertical-align: middle;
+}
+
+/* Titre des cartes */
+.md-typeset .grid.cards > ul > li strong {
+    display: block;
+    font-size: 1.1rem;
+    /* margin-top: 0.5rem; */
+    color: var(--md-default-fg-color);
+}
+
+/* Séparateur */
+.md-typeset .grid.cards > ul > li hr {
+    margin: 1rem 0;
+    border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+
+/* Description */
+.md-typeset .grid.cards > ul > li p {
+    /* margin-bottom: 1rem; */
+    color: var(--md-default-fg-color--light);
+}
+
+/* Liens dans les cartes */
+.md-typeset .grid.cards > ul > li a {
+    text-decoration: none;
+    color: var(--md-accent-fg-color);
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.md-typeset .grid.cards > ul > li a:hover {
+    text-decoration: underline;
+}
+
+/* Grille responsive */
+.md-typeset .grid.cards > ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.md-typeset {
+    line-height: inherit ;
+}

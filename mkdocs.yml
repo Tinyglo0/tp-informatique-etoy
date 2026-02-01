@@ -16,7 +16,7 @@ docs_dir: docs
 
 nav:
   - "Accueil": index.md
-  - "1M" : 1M/tp-image
+  - "1M" : 1M/index.md
   # - "Alien" : alien3/
 # - ...
 
@@ -73,6 +73,9 @@ plugins:
       collapse_single_pages: true
   - search
   - pyodide_macros:         # !!REQUIS!!
+      project:
+        id: "tp-informatique-etoy"
+        disambiguate_local_storage: false 
       build:
         python_libs:
           - alien_python
@@ -100,6 +103,9 @@ plugins:
         
         # Configuration des IDEs
         ides_id_hash_mode: relative
+      ides:
+          forbid_corr_and_REMs_with_infinite_attempts: false  # (défaut : true)
+
       testing:
         include: site
       module_name: macros
@@ -154,7 +160,7 @@ markdown_extensions:
   - pymdownx.tilde          # Passage ~~barré~~ ou en ~indice~.
   - pymdownx.keys           # Touches du clavier:  ++ctrl+d++
   - pymdownx.tasklist:      # Cases à cocher  - [ ]  et - [x]
-      custom_checkbox: false
+      custom_checkbox: true
       clickable_checkbox: true
   - pymdownx.tabbed:        # Volets glissants:  === "Mon volet"
       alternate_style: true # Meilleure compatibilité pour mobiles
@@ -168,7 +174,9 @@ markdown_extensions:
 extra_javascript:
   - xtra/javascripts/alienCodEx.js
 extra_css:
+  # - xtra/css/task-list.css
   - xtra/css/ajustements.css
+  - xtra/css/cards.css
 #   - xtra/css/base.css
 #   - xtra/css/header.css
 #   - xtra/css/search.css
