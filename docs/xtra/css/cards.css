@@ -28,7 +28,7 @@
 /* Titre des cartes */
 .md-typeset .grid.cards > ul > li strong {
     display: block;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     /* margin-top: 0.5rem; */
     color: var(--md-default-fg-color);
 }

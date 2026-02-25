@@ -7,5 +7,4 @@
 **/.git
 **/.venv
 .env
-.DS_Store
-docs/1M/.DS_Store
+**/.DS_Store
