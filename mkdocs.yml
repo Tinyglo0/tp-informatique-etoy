@@ -105,6 +105,7 @@ plugins:
         ides_id_hash_mode: relative
       ides:
           forbid_corr_and_REMs_with_infinite_attempts: false  # (défaut : true)
+          forbid_hidden_corr_and_REMs_without_secrets: false
 
       testing:
         include: site
