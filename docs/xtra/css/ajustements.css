@@ -36,3 +36,10 @@
     margin-left: auto;
     margin-left: 1.5em;
 }
+
+div.mkdocs-markmap {
+    height: 40vh !important;       
+    min-height: 500px !important; 
+    width: 100%;
+    /* border-radius: 8px; */
+}
