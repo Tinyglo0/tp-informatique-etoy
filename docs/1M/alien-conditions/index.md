@@ -109,8 +109,8 @@ Pour les questions suivantes écrire le code nécessaire pour obtenir le déplac
 
 
 
-{{ alien_IDE(5) }}
+{{ alien_IDE(5, MAX=1000) }}
 
-{{ alien_IDE(6) }}
+{{ alien_IDE(6, MAX=1000) }}
 
-{{ alien_IDE(7) }}
+{{ alien_IDE(7, MAX=1000) }}
