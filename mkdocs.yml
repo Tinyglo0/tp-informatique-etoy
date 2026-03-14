@@ -174,7 +174,6 @@ markdown_extensions:
       slugify: !!python/object/apply:pymdownx.slugs.slugify
         kwds:
           case: lower
-  - markdown_grid_tables
   # - toc:
   #     toc_depth: 0        # Si vous voulez supprimer la ToC (table of content) des pages
 
