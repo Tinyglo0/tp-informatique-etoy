@@ -18,6 +18,7 @@ nav:
   - "Accueil": index.md
   - "1M" : 1M/index.md
   - "Plan d'études" : plan-etudes/index.md
+  - "Calculateur de barème" : bareme/index.md
 
   # - "Alien" : alien3/
 # - ...
@@ -34,6 +35,7 @@ nav:
 exclude_docs: |
   **/*_REM.md
   **/*.py
+  **/*iframe.md
 
 
 # Configuration du thème:
@@ -144,6 +146,7 @@ markdown_extensions:
   - pymdownx.inlinehilite   # !!REQUIS!! Coloration syntaxique pour les "code spans": `#!python  code_python`
   - pymdownx.snippets:      # !!REQUIS!! Inclusion de fichiers externe.
       check_paths: true     # Fortement conseillé !
+      base_path: docs
   - pymdownx.superfences:   # !!REQUIS!!
       custom_fences:        # (custom_fences: uniquement si vous comptez utiliser mermaid)
         - name: mermaid
