@@ -1,5 +1,10 @@
 /* Style des cartes type NSI */
 .md-typeset .grid.cards > ul > li {
+    position: relative; /* Requis pour que le lien recouvre toute la carte */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
     border: 1px solid var(--md-default-fg-color--lightest);
     border-radius: 8px;
     padding: 1.2rem;
@@ -37,6 +42,7 @@
 .md-typeset .grid.cards > ul > li hr {
     margin: 1rem 0;
     border-top: 1px solid var(--md-default-fg-color--lightest);
+    width: 100%; /* Évite que le séparateur ne disparaisse à cause du flexbox centré */
 }
 
 /* Description */
@@ -55,6 +61,14 @@
     gap: 0.25rem;
 }
 
+/* Étend la zone cliquable du lien à toute la carte */
+.md-typeset .grid.cards > ul > li a::after {
+    content: "";
+    position: absolute;
+    inset: 0; /* Raccourci pour top: 0; right: 0; bottom: 0; left: 0; */
+    z-index: 1;
+}
+
 .md-typeset .grid.cards > ul > li a:hover {
     text-decoration: underline;
 }
@@ -62,8 +76,10 @@
 /* Grille responsive */
 .md-typeset .grid.cards > ul {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 17rem));
+    /* gap: 1.5rem; */
+    column-gap: 3rem;
+    row-gap: 2.5rem;
 }
 
 .md-typeset {
