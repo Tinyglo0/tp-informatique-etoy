@@ -43,3 +43,49 @@ div.mkdocs-markmap {
     width: 100%;
     /* border-radius: 8px; */
 }
+
+.md-grid {
+    max-width: 90%; 
+}
+
+/*
+*************************
+*    Les admonitions    *
+*************************
+*/
+
+.md-typeset .admonition,
+.md-typeset details {
+    font-size: 0.8rem;
+    border-radius: 0 8px 0 8px;
+    /* bordures */
+}
+
+
+details.question:focus-within {
+    box-shadow: none;
+}
+
+.md-typeset div.arithmatex {
+    overflow: initial;
+}
+
+
+/* width percents */
+.md-typeset .w5  , .w5  { width: 5%;  }
+.md-typeset .w10 , .w10 { width: 10%; }
+.md-typeset .w15 , .w15 { width: 15%; }
+.md-typeset .w20 , .w20 { width: 20%; }
+.md-typeset .w25 , .w25 { width: 25%; }
+.md-typeset .w30 , .w30 { width: 30%; }
+.md-typeset .w35 , .w35 { width: 35%; }
+.md-typeset .w40 , .w40 { width: 40%; }
+.md-typeset .w45 , .w45 { width: 45%; }
+.md-typeset .w50 , .w50 { width: 50%; }
+.md-typeset .w55 , .w55 { width: 55%; }
+.md-typeset .w60 , .w60 { width: 60%; }
+.md-typeset .w65 , .w65 { width: 65%; }
+.md-typeset .w75 , .w75 { width: 75%; }
+.md-typeset .w80 , .w80 { width: 80%; }
+.md-typeset .w90 , .w90 { width: 90%; }
+.md-typeset .w100, .w100{ width: 100%; }
