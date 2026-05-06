@@ -35,7 +35,7 @@ Un élève décide de le coder en langage Python de la manière suivante :
 
 Compléter le script suivant. Cet exercice ayant une part d'aléatoire, il faut absolument cliquer sur le bouton de validation pour vérifier votre code.
 
-{{ IDE('exo') }}
+{{ IDE('exo', MAX=1000) }}
 
 Si votre script est juste, vous pouvez le tester ci-dessous (Cliquer sur Exécuter le code)
 
