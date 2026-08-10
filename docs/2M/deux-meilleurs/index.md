@@ -115,4 +115,4 @@ flowchart LR
     (None, None)
     ```
 
-{{ IDE_versions('exo', preferred=2) }}
+{{ IDE('exo', MAX=1000) }}
