@@ -89,3 +89,14 @@ details.question:focus-within {
 .md-typeset .w80 , .w80 { width: 80%; }
 .md-typeset .w90 , .w90 { width: 90%; }
 .md-typeset .w100, .w100{ width: 100%; }
+
+/*
+  La classe .center permet de centrer des éléments,
+  les images par exemple
+*/
+
+.center {
+    display: block;
+    margin: 0 auto;
+}
+

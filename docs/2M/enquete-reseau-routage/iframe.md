@@ -1,5 +1,5 @@
 <div class="map">
-  <iframe src="https://nsi-games.forge.apps.education.fr/netenquete/game.html#terminale"></iframe>
+  <iframe src="https://nsigames.forge.apps.education.fr/netenquete/game.html#terminale"></iframe>
 </div>
 
 <style>
