@@ -57,6 +57,6 @@ Vous devrez utiliser les fonctions décrites dans le tableau ci-dessous :
 
 L'appel `#!py lance_simulation()` permet de... lancer la simulation ! **Cette ligne ne doit pas être modifiée.**
 
-{{ IDE('pythons/exo', STD_KEY="oospy") }}
+{{ IDE('pythons/exo', MAX=1000, STD_KEY="oospy") }}
 
 {{ figure("langton", p5_buttons='left', admo_title="La fourmi" ) }}
