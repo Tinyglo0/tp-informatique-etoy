@@ -21,5 +21,4 @@ if nom_pays in pays:
 else:
     print("Ce pays n'est pas dans la liste.")
 
-# --------- PYODIDE:secrets --------- #
-pass
+

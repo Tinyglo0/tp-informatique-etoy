@@ -19,4 +19,4 @@ nb_pays = len(pays)
 print("Nombre de pays:", nb_pays)
 
 # --------- PYODIDE:secrets --------- #
-pass
+assert nb_pays == 27, "La variable nb_pays n'a pas la bonne valeur."

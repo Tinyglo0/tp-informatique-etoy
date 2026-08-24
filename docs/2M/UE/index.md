@@ -10,20 +10,20 @@ population = [83.16, 8.98, 11.75, 6.45, 0.90, 3.85, 5.93, 47.43, 1.37, 5.56,68.4
     
 Répondez aux questions suivantes en écrivant les instructions en Python (les listes sont déjà chargées dans l'environnement de la console, vous n'avez pas besoin de les redéfinir).
 
-1. Combien y a-t-il de pays dans l'UE ?
+1) Combien y a-t-il de pays dans l'UE ?
 {{ IDE('ex1_1', MAX=1000) }}
 
-2. Quel est le nombre total d'habitants de l'UE ? (l'utilisation de la fonction `sum` n'est pas autorisée)
+2) Quel est le nombre total d'habitants de l'UE ? (l'utilisation de la fonction `sum` n'est pas autorisée)
 {{ IDE('ex1_2', MAX=1000,SANS="sorted, max, sum, min") }}
 
-3. Quel est le pays le plus peuplé de l'UE ? (l'utilisation de la fonction `max` n'est pas autorisée)
+3) Quel est le pays le plus peuplé de l'UE ? (l'utilisation de la fonction `max` n'est pas autorisée)
 {{ IDE('ex1_3', MAX=1000,SANS="sorted, max, sum,min") }}
 
-4. Quel est le pays le moins peuplé de l'UE ? (l'utilisation de la fonction `min` n'est pas autorisée)
+4) Quel est le pays le moins peuplé de l'UE ? (l'utilisation de la fonction `min` n'est pas autorisée)
 {{ IDE('ex1_4', MAX=1000,SANS="sorted, max, sum,min") }}
 
-5. Ecrire un programme qui affiche un pays de l'UE au hasard, ainsi que sa capitale et son nombre d'habitants.
+5) Ecrire un programme qui affiche un pays de l'UE au hasard, ainsi que sa capitale et son nombre d'habitants.
 {{ IDE('ex1_5', MAX=1000,SANS="sorted, max, sum,min") }}
 
-6. Ecrire un programme qui demande à l'utilisateur de saisir le nom d'un pays de l'UE et qui affiche la capitale de ce pays.
+6) Ecrire un programme qui demande à l'utilisateur de saisir le nom d'un pays de l'UE et qui affiche la capitale de ce pays.
 {{ IDE('ex1_6', MAX=1000,SANS="sorted, max, sum,min") }}

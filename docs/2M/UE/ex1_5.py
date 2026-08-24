@@ -20,5 +20,4 @@ print("Pays au hasard:", pays[indice_hasard])
 print("Capitale:", capitale[indice_hasard])
 print("Population:", population[indice_hasard])
 
-# --------- PYODIDE:secrets --------- #
-pass
+
