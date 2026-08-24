@@ -5,6 +5,7 @@ title: Listes en Python
 
 # Listes des exercices sur les listes
 
+<!-- - [ ] [TP1 - Listes](tp1/index.md) -->
 - [ ] [Course cycliste](course_cycliste/index.md)
 - [ ] [Course cycliste II](course_cycliste_II/index.md)
 - [ ] [Pays le l'UE](UE/index.md)

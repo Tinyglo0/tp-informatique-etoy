@@ -130,6 +130,8 @@ Pour un exercice standard, on utilise généralement :
 3. **`env` est invisible** : Le code dans `env` est exécuté mais jamais montré
    à l'élève. Idéal pour prédéfinir des listes, des données, etc.
 
+4. **Attention aux restrictions `SANS`** : Si vous interdisez une fonction via la macro IDE (ex: `SANS="sum"`), vous ne devez **pas non plus l'utiliser** dans vos sections `secrets` ou `env`. La restriction s'applique globalement et déclenchera une erreur `FORBIDDEN`. Privilégiez des valeurs en dur ou des boucles basiques dans vos tests cachés.
+
 ### 2.4 Exemple complet
 
 ```python
@@ -407,6 +409,7 @@ Voici la checklist complète à suivre pour créer un exercice :
 | Solution visible dans les tests | Algorithme dans `secrets` | Remplacer par des valeurs en dur ou des assertions simples |
 | Image non trouvée | Chemin relatif incorrect | Le chemin est relatif à `index.md` |
 | Extension `.py` dans le chemin IDE | `{{ IDE('scripts/exo.py') }}` | Retirer l'extension : `{{ IDE('scripts/exo') }}` |
+| `FORBIDDEN: don't use ...` | Fonction interdite par `SANS=` utilisée dans `secrets` ou `env` | Ne pas utiliser la fonction dans les tests cachés (utiliser des valeurs en dur ou algorithmes simples) |
 
 ---
 
