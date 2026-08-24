@@ -22,4 +22,7 @@ print("Nombre total d'habitants:", total_hab)
 
 # --------- PYODIDE:secrets --------- #
 assert 'total_hab' in globals(), "La variable total_hab n'est pas définie."
-assert abs(total_hab - sum(population)) < 0.1, "La variable total_hab n'a pas la bonne valeur."
+_s = 0
+for _p in population:
+    _s += _p
+assert abs(total_hab - _s) < 0.1, "La variable total_hab n'a pas la bonne valeur."
