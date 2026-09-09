@@ -14,6 +14,6 @@ for i in range(len(season)):
         villes_hiver.append(city[i])
 
 # --------- PYODIDE:secrets --------- #
-assert len(villes_hiver) == 22, "Le nombre de villes n'est pas correct."
+assert len(villes_hiver) == 27, "Le nombre de villes n'est pas correct."
 assert villes_hiver[0] == "Chamonix", "La première ville n'est pas correcte."
 assert "Winter" not in villes_hiver, "La liste ne doit contenir que les noms des villes."
