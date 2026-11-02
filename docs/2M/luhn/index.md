@@ -33,16 +33,17 @@ Le calcul s'effectue en quatre étapes :
 
 | Étape | Description | Résultat pour la carte exemple |
 | :--- | :--- | :--- |
-| **Liste initiale** | Les $16$ chiffres de la carte | `4` `1` `3` `7` `8` `9` `4` `7` `1` `1` `7` `5` `5` `9` `0` `4` |
-| **Étape 1** | **Doubler la valeur** un élément sur deux (les indices pairs $0, 2, 4\dots$) | <span style="background-color: #f3d1df; padding: 2px 5px; border-radius: 3px;">**8**</span> `1` <span style="background-color: #f3d1df; padding: 2px 5px; border-radius: 3px;">**6**</span> `7` <span style="background-color: #f3d1df; padding: 2px 5px; border-radius: 3px;">**16**</span> `9` <span style="background-color: #f3d1df; padding: 2px 5px; border-radius: 3px;">**8**</span> `7` <span style="background-color: #f3d1df; padding: 2px 5px; border-radius: 3px;">**2**</span> `1` <span style="background-color: #f3d1df; padding: 2px 5px; border-radius: 3px;">**14**</span> `5` <span style="background-color: #f3d1df; padding: 2px 5px; border-radius: 3px;">**10**</span> `9` <span style="background-color: #f3d1df; padding: 2px 5px; border-radius: 3px;">**0**</span> `4` |
-| **Étape 2** | Si le résultat dépasse $9$, **additionner les chiffres du produit** (par ex. $16 \implies 1 + 6 = 7$) | `8` `1` `6` `7` <span style="background-color: #bbf7d0; padding: 2px 5px; border-radius: 3px;">**7**</span> `9` `8` `7` `2` `1` <span style="background-color: #bbf7d0; padding: 2px 5px; border-radius: 3px;">**5**</span> `5` <span style="background-color: #bbf7d0; padding: 2px 5px; border-radius: 3px;">**1**</span> `9` `0` `4` |
+| **Liste initiale** | Les $16$ chiffres de la carte | <span class="luhn-digits"><span class="d">4</span><span class="d">1</span><span class="d">3</span><span class="d sep">7</span><span class="d">8</span><span class="d">9</span><span class="d">4</span><span class="d sep">7</span><span class="d">1</span><span class="d">1</span><span class="d">7</span><span class="d sep">5</span><span class="d">5</span><span class="d">9</span><span class="d">0</span><span class="d">4</span></span> |
+| **Étape 1** | **Doubler la valeur** un élément sur deux (les indices pairs $0, 2, 4\dots$) | <span class="luhn-digits"><span class="d doubled">8</span><span class="d">1</span><span class="d doubled">6</span><span class="d sep">7</span><span class="d doubled">16</span><span class="d">9</span><span class="d doubled">8</span><span class="d sep">7</span><span class="d doubled">2</span><span class="d">1</span><span class="d doubled">14</span><span class="d sep">5</span><span class="d doubled">10</span><span class="d">9</span><span class="d doubled">0</span><span class="d">4</span></span> |
+| **Étape 2** | Si le résultat dépasse $9$, **additionner les chiffres du produit** (par ex. $16 \implies 1 + 6 = 7$) | <span class="luhn-digits"><span class="d">8</span><span class="d">1</span><span class="d">6</span><span class="d sep">7</span><span class="d reduced">7</span><span class="d">9</span><span class="d">8</span><span class="d sep">7</span><span class="d">2</span><span class="d">1</span><span class="d reduced">5</span><span class="d sep">5</span><span class="d reduced">1</span><span class="d">9</span><span class="d">0</span><span class="d">4</span></span> |
 | **Étape 3** | **Faire la somme** de tous les éléments obtenus | $8 + 1 + 6 + 7 + 7 + 9 + 8 + 7 + 2 + 1 + 5 + 5 + 1 + 9 + 0 + 4 = \mathbf{80}$ |
 | **Étape 4** | Vérifier si le total **se termine par zéro** | $80$ se termine par $0$ : **le numéro est valide** ! |
 
-> [!TIP] Astuce pour l'étape 2
-> Lorsqu'on double un chiffre entre $0$ et $9$, le résultat vaut au maximum $18$. Si ce résultat est supérieur à $9$, additionner ses chiffres revient tout simplement à lui **soustraire $9$** (ou à calculer `(double // 10) + (double % 10)`).
-> 
-> *Exemple :* $16 \implies 1 + 6 = 7$ et $16 - 9 = 7$.
+??? info "Astuce pour l'étape 2"
+
+    Lorsqu'on double un chiffre entre $0$ et $9$, le résultat vaut au maximum $18$. Si ce résultat est supérieur à $9$, additionner ses chiffres revient tout simplement à lui **soustraire $9$** (ou à calculer `(double // 10) + (double % 10)`).
+
+    *Exemple :* $16 \implies 1 + 6 = 7$ et $16 - 9 = 7$.
 
 ---
 
@@ -56,19 +57,19 @@ flowchart LR
     
     Init --> LoopCheck{"Reste-t-il des chiffres<br>à analyser dans la liste ?"}
     
-    LoopCheck -- "Non (Fin de la boucle)" --> CheckModulo{"Le total se termine-t-il par 0 ?<br>total modulo ... == 0 ?"}
+    LoopCheck -- "Non (Fin de la boucle)" --> CheckModulo{"Le total se termine-t-il par 0 ?"}
     LoopCheck -- "Oui (Chiffre à l'indice i)" --> CheckParite{"Faut-il doubler ce chiffre ?<br>Indice i pair ?"}
     
-    CheckParite -- "Non" --> SetSimple["Conserver le chiffre :<br>valeur = ..."]
-    CheckParite -- "Oui" --> CalcDouble["Calculer le double :<br>double = chiffre * ..."]
+    CheckParite -- "Non" --> SetSimple["Conserver le chiffre."]
+    CheckParite -- "Oui" --> CalcDouble["Calculer le double."]
     
-    CalcDouble --> CheckNeuf{"Le double dépasse-t-il 9 ?<br>double > ... ?"}
+    CalcDouble --> CheckNeuf{"Le double dépasse-t-il 9 ?"}
     
-    CheckNeuf -- "Non" --> SetDouble["Conserver le double :<br>valeur = double"]
-    CheckNeuf -- "Oui" --> SetSomme["Additionner les deux chiffres :<br>valeur = ..."]
+    CheckNeuf -- "Non" --> SetDouble["Conserver le double"]
+    CheckNeuf -- "Oui" --> SetSomme["Additionner les deux chiffres"]
     
     %% Nœud de convergence pour l'ajout au total
-    AddTotal["Ajouter au total :<br>total = total + valeur"]
+    AddTotal["Ajouter au total"]
     
     SetSimple --> AddTotal
     SetDouble --> AddTotal
@@ -81,6 +82,7 @@ flowchart LR
     
     CheckModulo -- "Oui" --> RetTrue([Retourner True : Valide])
     CheckModulo -- "Non" --> RetFalse([Retourner False : Invalide])
+
 ```
 
 ---
@@ -107,4 +109,4 @@ flowchart LR
     False
     ```
 
-{{ IDE_versions('exo_vide', 'exo_trous', preferred=2, MAX=1000) }}
+{{ IDE('exo', MAX=1000) }}

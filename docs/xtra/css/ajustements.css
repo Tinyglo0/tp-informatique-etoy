@@ -100,3 +100,53 @@ details.question:focus-within {
     margin: 0 auto;
 }
 
+/*
+  Tableau de l'algorithme de Luhn : alignement des chiffres
+*/
+.luhn-digits {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-family: var(--md-code-font-family, monospace);
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+
+.luhn-digits .d {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    border-radius: 4px;
+    background-color: rgba(125, 125, 125, 0.12);
+    box-sizing: border-box;
+}
+
+.luhn-digits .d.sep {
+    margin-right: 8px;
+}
+
+.luhn-digits .d.doubled {
+    background-color: #fce7f3;
+    color: #9d174d;
+    font-weight: bold;
+}
+
+.luhn-digits .d.reduced {
+    background-color: #dcfce7;
+    color: #166534;
+    font-weight: bold;
+}
+
+[data-md-color-scheme="slate"] .luhn-digits .d.doubled {
+    background-color: rgba(244, 114, 182, 0.25);
+    color: #f472b6;
+}
+
+[data-md-color-scheme="slate"] .luhn-digits .d.reduced {
+    background-color: rgba(74, 222, 128, 0.25);
+    color: #4ade80;
+}
+
+

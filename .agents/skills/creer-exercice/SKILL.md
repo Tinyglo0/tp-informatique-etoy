@@ -253,7 +253,36 @@ Contexte général de l'exercice...
     {{ IDE('exo2', MAX=1000) }}
 ```
 
-### 3.3 Diagrammes, formules et coloration inline
+### 3.3 Admonitions et encadrés : Syntaxe Material for MkDocs obligatoire
+
+> ⚠️ **IMPORTANT : Ne JAMAIS utiliser la syntaxe GitHub Alerts (`> [!TIP]`, `> [!NOTE]`, `> [!WARNING]`, `> [!IMPORTANT]`, etc.)**.
+> Cette syntaxe n'est pas reconnue par le moteur de rendu MkDocs Material et s'affiche sous forme de simple citation brute cassée.
+
+Toujours utiliser la syntaxe standard des **admonitions MkDocs** :
+- `!!! <type> "Titre"` : encadré **ouvert en permanence** (ex: `!!! warning "Contraintes"`).
+- `??? <type> "Titre"` : encadré **replié par défaut**, dépliable au clic (ex: `??? info "Astuce"`, `??? tip "Indice"`, `??? question "Question 1"`).
+- `???+ <type> "Titre"` : encadré **déplié par défaut**, repliable au clic (ex: `???+ example "Exemples"`).
+
+**Types fréquents** :
+- `info` : astuces de calcul, compléments d'information.
+- `tip` : indices ou aides méthodologiques.
+- `warning` : contraintes strictes, interdictions ou pièges à éviter.
+- `example` : exemples de code, doctests `pycon`.
+- `question` : questions progressives numérotées.
+
+**Règle stricte d'indentation** :
+Tout le contenu à l'intérieur d'une admonition (paragraphes, code `pycon`, listes, blocs mathématiques ou IDE) **doit obligatoirement être indenté de 4 espaces** :
+
+```markdown
+??? info "Astuce pour l'étape 2"
+
+    Lorsqu'on double un chiffre entre 0 et 9, le résultat vaut au maximum 18.
+    Additionner ses chiffres revient à lui **soustraire 9**.
+
+    *Exemple :* $16 \implies 1 + 6 = 7$ et $16 - 9 = 7$.
+```
+
+### 3.4 Diagrammes, formules et coloration inline
 
 - **Code Python inline coloré** : utiliser `#!py True`, `#!py None`, `#!py x % 2 == 0`.
 - **Formules mathématiques LaTeX** : `$d = v \times t$` (inline) ou `$$ \text{Puissance} = \text{Force} + \text{Bonus} $$` (bloc).
@@ -357,8 +386,9 @@ Pour mettre deux images côte à côte :
 - [ ] **Page `index.md` créée** :
   - Frontmatter avec `hide: [navigation, toc]` et `title:`
   - Énoncé clair + exemples dans `???+ example "Exemples"` avec bloc `pycon`
+  - **Syntaxe d'admonition MkDocs respectée** : `??? info`, `!!! warning`, `??? tip`... et **jamais** de syntaxe GitHub Alerts (`> [!TIP]`)
   - Tous les appels `{{ IDE(..., MAX=1000) }}` contiennent bien **`MAX=1000`** et sont **sans extension `.py`**
-  - Indentation de **4 espaces** respectée à l'intérieur des admonitions `??? question`
+  - Indentation de **4 espaces** respectée à l'intérieur de toutes les admonitions (`??? question`, `??? info`, etc.)
 - [ ] **Lien ajouté** dans la page thématique (`docs/1M/...` ou `docs/2M/...`)
 - [ ] **Vérification locale** (`mkdocs build` ou `mkdocs serve`) : aucune erreur de build, les tests publics et secrets passent avec le code de `corr`.
 
