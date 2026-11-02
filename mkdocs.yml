@@ -185,6 +185,8 @@ markdown_extensions:
 
 extra_javascript:
   - xtra/javascripts/alienCodEx.js
+watch:
+  - overrides
 extra_css:
   # - xtra/css/task-list.css
   - xtra/css/ajustements.css

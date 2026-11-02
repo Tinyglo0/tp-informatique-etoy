@@ -1,18 +1,19 @@
 ---
 name: creer-exercice
 description: >-
-  Guide complet pour créer un exercice interactif sur la plateforme TP Informatique Etoy.
-  Couvre la structure des fichiers, les sections Pyodide, les macros IDE, les admonitions,
-  l'intégration d'images, et l'ajout de la page dans la navigation du site.
-  Activer ce skill dès qu'il faut créer, modifier ou transformer un exercice.
+  Guide complet pour créer un exercice interactif en Python avec sa correction associée
+  sur la plateforme TP Informatique Etoy (basée sur CodEx et pyodide-mkdocs-theme).
+  Couvre la structure des fichiers, les sections Pyodide (env, code, corr, tests, secrets, post),
+  les fichiers de correction détaillée (_REM.md), les macros IDE (avec MAX=1000 obligatoire),
+  les versions vides/à trous, les admonitions et l'ajout dans la navigation.
+  Activer ce skill dès qu'il faut créer, modifier ou transformer un exercice Python.
 ---
 
-# Créer un exercice interactif — Guide complet
+# Créer un exercice Python interactif avec correction — Guide complet
 
-Ce skill décrit **pas à pas** comment créer un exercice interactif pour le site
-TP Informatique du Gymnase d'Etoy. Le site est généré avec MkDocs et le thème
-`pyodide-mkdocs-theme` (PMT), qui permet aux élèves d'exécuter du Python
-directement dans leur navigateur.
+Ce skill décrit **pas à pas** comment créer un exercice interactif en Python avec sa correction associée pour le site TP Informatique du Gymnase d'Etoy, basé sur [CodEx](https://forge.apps.education.fr/codex/codex.forge.apps.education.fr) et le thème [`pyodide-mkdocs-theme` (PMT)](https://frederic-zinelli.gitlab.io/pyodide-mkdocs-theme/#creer-des-ides).
+
+> **Règle d'or pour les IDE** : Tous les appels `IDE(...)`, `IDE_versions(...)` et `alien_IDE(...)` pour un exercice doivent **systématiquement** inclure `MAX=1000` (nombre d'essais quasi-infini).
 
 ---
 
@@ -20,140 +21,153 @@ directement dans leur navigateur.
 
 ### 1.1 Arborescence type
 
+Deux organisations sont utilisées dans `docs/<niveau>/<nom-exercice>/` (`<niveau>` = `1M` ou `2M`) :
+
+**Option A — Fichiers à la racine de l'exercice (style CodEx classique, 1 à 4 scripts) :**
 ```text
 docs/<niveau>/<nom-exercice>/
-├── index.md                # Page Markdown de l'exercice
-├── scripts/                # (ou pythons/) Dossier des scripts Python
-│   ├── exo1.py
-│   ├── exo2.py
-│   └── exo2_REM.md         # (Optionnel) Remarque affichée après validation réussie
+├── index.md                # Énoncé Markdown de l'exercice
+├── exo.py                  # Script Python (code élève + correction + tests)
+├── exo_REM.md              # (Optionnel) Explications et solutions alternatives post-validation
+├── exo_trous.py            # (Optionnel) Version à trous si exercice bi-version
 └── images/                 # (Optionnel) Illustrations
     └── schema.png
 ```
 
-- `<niveau>` = `1M` ou `2M`
-- `<nom-exercice>` = nom en minuscules avec tirets (ex : `entrainement-listes`)
-- Les scripts Python peuvent être à la racine du dossier ou dans un sous-dossier
-  `scripts/` ou `pythons/`.
+**Option B — Sous-dossier `scripts/` ou `pythons/` (recommandé si nombreux scripts) :**
+```text
+docs/<niveau>/<nom-exercice>/
+├── index.md                # Page Markdown de l'exercice
+├── pythons/                # (ou scripts/) Dossier des scripts Python
+│   ├── exo1.py
+│   ├── exo1_REM.md         # (Optionnel) Remarque de correction associée à exo1.py
+│   ├── exo2.py
+│   └── exo2_REM.md
+└── images/                 # (Optionnel) Illustrations
+```
 
-### 1.2 Convention de nommage
+### 1.2 Convention de nommage des fichiers
 
 | Fichier | Rôle |
 |:--------|:-----|
 | `exo.py` | Script unique pour un exercice simple |
-| `exo1.py`, `exo2.py`, ... | Scripts numérotés quand l'exercice a plusieurs questions |
-| `exo1_1.py`, `exo1_2.py`, ... | Sous-questions (ex : question 1.1, 1.2, ...) |
-| `exo_REM.md` | Remarque post-validation (même nom que le `.py`, suffixé `_REM`) |
-| `exo_a.py`, `exo_b.py` | Versions alternatives (vide / à trous) pour `IDE_versions` |
+| `exo1.py`, `exo2.py`, ... | Scripts numérotés pour un exercice à plusieurs étapes/questions |
+| `exo1_q1.py`, `ex1_1.py` | Sous-questions d'un même exercice |
+| `exo_vide.py`, `exo_trous.py` (ou `exo_a.py`, `exo_b.py`) | Versions « vide » et « à trous » pour `IDE_versions` |
+| `<nom>_REM.md` | Correction commentée / remarques pédagogiques (même dossier et même préfixe que `<nom>.py`) |
+| `<nom>_VIS_REM.md` | Remarques visibles sous la correction |
+
+> **Note `mkdocs.yml`** : Les motifs `**/*.py` et `**/*_REM.md` sont déclarés dans `exclude_docs` afin d'être chargés par Pyodide sans générer de pages HTML parasites.
 
 ---
 
-## 2. Fichier Python : les sections Pyodide
+## 2. Fichier Python (`.py`) : Sections Pyodide et Correction
 
-Chaque fichier `.py` est découpé en sections grâce à des commentaires spéciaux.
-L'ordre des sections doit être respecté.
+Chaque fichier `.py` regroupe l'environnement, le code de départ, la **correction** et les **tests de validation** grâce aux séparateurs `# --------- PYODIDE:<section> --------- #` (ou `# --- PYODIDE:<section> --- #`).
 
-### 2.1 Toutes les sections disponibles
+### 2.1 Cycle d'exécution dans `pyodide-mkdocs-theme`
+
+| Action de l'élève | Sections exécutées (dans l'ordre) |
+|:------------------|:----------------------------------|
+| **Exécuter** (bouton Play ▶) | `env` ➔ `code` (élève) ➔ `tests` (publics) ➔ `post` |
+| **Valider** (bouton Check ✔️) | `env` ➔ `code` (élève) ➔ `tests` (publics) ➔ `secrets` (cachés) ➔ `post` |
+
+Lorsque la validation réussit, le thème révèle automatiquement la **correction** contenue dans la section `corr` ainsi que le contenu éventuel du fichier `<nom>_REM.md`.
+
+### 2.2 Structure complète d'un fichier `exo.py`
 
 ```python
 # --------- PYODIDE:ignore --------- #
-# Code ignoré par Pyodide (imports locaux pour tests hors navigateur)
+# (Optionnel) Code ignoré par PMT, utile pour tester le fichier en local
 
 # --------- PYODIDE:env --------- #
-# Code d'initialisation exécuté silencieusement AVANT le code de l'élève.
-# Sert à définir des variables, fonctions utilitaires, imports.
-# L'élève ne voit PAS ce code.
+# (Optionnel) Exécuté silencieusement AVANT le code de l'élève.
+# Invisible pour l'élève. Sert à définir des variables, constantes,
+# fonctions utilitaires, imports cachés ou drapeaux de vérification.
 
 # --------- PYODIDE:code --------- #
 # Code pré-rempli dans l'éditeur de l'élève.
-# C'est le point de départ que l'élève doit compléter.
+# Utiliser `...` ou `pass` pour les zones à compléter.
+def ma_fonction(param):
+    ...
 
 # --------- PYODIDE:corr --------- #
-# Solution / correction complète.
-# Accessible via le bouton "Correction" après MAX tentatives.
-# OBLIGATOIRE si une section `secrets` existe.
+# OBLIGATOIRE dès qu'il y a une section `secrets` ou un fichier `_REM.md`.
+# Contient la solution de référence propre et lisible.
+def ma_fonction(param):
+    return param * 2
 
 # --------- PYODIDE:tests --------- #
-# Tests PUBLICS visibles par l'élève (onglet "Tests").
-# Exécutés quand l'élève clique sur "Exécuter".
+# Tests PUBLICS visibles par l'élève et exécutés avec le bouton "Exécuter".
+# Doivent correspondre exactement aux exemples donnés dans l'énoncé Markdown.
+assert ma_fonction(3) == 6
+assert ma_fonction(0) == 0
 
 # --------- PYODIDE:secrets --------- #
-# Tests CACHÉS, invisibles pour l'élève.
-# Exécutés uniquement lors de la validation (bouton "Valider").
-# Ne JAMAIS y mettre la logique de la solution (boucles, algorithmes).
-# Préférer des valeurs en dur ou des assertions simples.
-
-# --------- PYODIDE:checks --------- #
-# Analyse statique du code de l'élève via __USER_CODE__.
-# Ex : vérifier qu'une fonction interdite n'est pas utilisée.
+# Tests CACHÉS exécutés uniquement lors du clic sur "Valider".
+# Tester les cas limites (0, négatifs, listes vides, doublons...) et des cas aléatoires.
+assert ma_fonction(-5) == -10
+for x in range(10, 50):
+    attendu = x * 2
+    assert ma_fonction(x) == attendu, f"Erreur avec {x = }"
 
 # --------- PYODIDE:post --------- #
-# Code de nettoyage exécuté après l'exécution et les tests.
-
-# --------- PYODIDE:dessin --------- #
-# Logique de dessin pour les exercices alien_python / pixel_art.
-
-# --------- PYODIDE:grille --------- #
-# Grille de référence pour les exercices alien_python.
+# (Optionnel) Exécuté à la toute fin (dans un bloc finally) pour nettoyer
+# l'environnement (ex: restaurer `input` ou `randint`, fermer une figure).
 ```
 
-### 2.2 Sections les plus courantes
+### 2.3 Bonnes pratiques pour la correction (`corr`, `_REM.md`, `tests`, `secrets`)
 
-Pour un exercice standard, on utilise généralement :
+1. **`corr` est obligatoire avec `secrets`** : Si un fichier contient `PYODIDE:secrets`, il **doit** contenir `PYODIDE:corr` (ou un fichier `_REM.md`), sinon `mkdocs` échoue à la compilation.
+2. **Clarté de `PYODIDE:corr`** : Mettre dans `corr` la solution la plus pédagogique et lisible pour le niveau visé (`1M` ou `2M`). Les variantes plus compactes (compréhension de liste, opérateur ternaire, indices négatifs, etc.) vont dans `exo_REM.md`.
+3. **Fichier `exo_REM.md` (Correction commentée)** :
+   - Placé à côté de `exo.py` (ex: `docs/1M/bissextiles/exo_REM.md`).
+   - Rédigé en Markdown standard (blocs de code ` ```python `, admonitions `!!! abstract`, tableaux, formules LaTeX).
+   - Explique la démarche, les erreurs classiques (ex: décalage d'indice `rang - 1`) et présente d'autres implémentations valides (`elif`, une seule ligne, etc.).
+4. **Messages d'erreur dans `secrets`** :
+   - Toujours ajouter un message d'erreur clair dans les assertions secrètes pour aider l'élève à débugger sans dévoiler la formule :
+     ```python
+     assert est_bissextile(annee) is attendu, f"Erreur avec {annee = }"
+     ```
+   - Si l'exercice interdit une fonction via `SANS="sum, max"`, **ne pas utiliser non plus** cette fonction dans `env`, `tests` ou `secrets` (la restriction AST/runtime s'applique aussi pendant les tests !). Calculer le résultat attendu avec une boucle basique ou des valeurs en dur.
+5. **Vérifier qu'une fonction précédente est bien réutilisée** (ex: exercices multi-questions type `gestion-rpg` ou `trajet-voiture`) :
+   - Dans `PYODIDE:env`, définir les fonctions des questions précédentes en levant un drapeau (`flag`) lorsqu'elles sont appelées :
+     ```python
+     # --------- PYODIDE:env --------- #
+     flag_distance = False
 
-```python
-# --------- PYODIDE:env --------- #
-# Variables / fonctions prédéfinies (optionnel)
+     def calculer_distance(v, t):
+         global flag_distance
+         flag_distance = True
+         return v * t
+     ```
+   - Dans `PYODIDE:secrets`, vérifier le drapeau et afficher un avertissement avec `terminal_message` (associé à `STD_KEY="1234"` dans la macro `IDE`) :
+     ```python
+     # --------- PYODIDE:secrets --------- #
+     if not flag_distance:
+         terminal_message("1234", "Utilisez la fonction calculer_distance !", "warning")
+     assert cout_trajet(110, 2, 6, 1.85) == 24.42
+     ```
 
-# --------- PYODIDE:code --------- #
-# Code de départ pour l'élève
+### 2.4 Version vide vs Version à trous (`exo_vide.py` / `exo_trous.py`)
 
-# --------- PYODIDE:corr --------- #
-# Solution complète
-
-# --------- PYODIDE:secrets --------- #
-# Tests cachés de validation
-```
-
-### 2.3 Règles importantes
-
-1. **`secrets` requiert `corr`** : Si un fichier contient une section `secrets`,
-   il DOIT aussi contenir une section `corr` (ou un fichier `_REM.md`).
-   Sinon MkDocs lèvera une erreur au build.
-
-2. **Ne pas mettre la solution dans `secrets`** : Les tests cachés ne doivent
-   PAS contenir l'algorithme attendu. Si l'élève provoque une erreur, le
-   traceback pourrait révéler le contenu. Préférer :
-   - Des valeurs en dur (tableaux pré-calculés)
-   - Des assertions simples (`assert f(5) == 25`)
-
-3. **`env` est invisible** : Le code dans `env` est exécuté mais jamais montré
-   à l'élève. Idéal pour prédéfinir des listes, des données, etc.
-
-4. **Attention aux restrictions `SANS`** : Si vous interdisez une fonction via la macro IDE (ex: `SANS="sum"`), vous ne devez **pas non plus l'utiliser** dans vos sections `secrets` ou `env`. La restriction s'applique globalement et déclenchera une erreur `FORBIDDEN`. Privilégiez des valeurs en dur ou des boucles basiques dans vos tests cachés.
-
-### 2.4 Exemple complet
-
-```python
-# --------- PYODIDE:env --------- #
-notes = [12, 15, 8, 19, 14, 7, 16]
-
-# --------- PYODIDE:code --------- #
-# La liste `notes` est déjà définie.
-# Calculer la moyenne des notes (sans utiliser sum).
-moyenne = ...
-print("Moyenne:", moyenne)
-
-# --------- PYODIDE:corr --------- #
-total = 0
-for n in notes:
-    total += n
-moyenne = total / len(notes)
-print("Moyenne:", moyenne)
-
-# --------- PYODIDE:secrets --------- #
-assert abs(moyenne - 13.0) < 0.01, "La moyenne n'est pas correcte"
-```
+Inspiré de CodEx, on peut proposer deux niveaux d'accompagnement :
+- **Version vide (`exo.py` ou `exo_vide.py`)** : seule la signature de la fonction est donnée :
+  ```python
+  def deux_meilleurs(scores):
+      ...
+  ```
+- **Version à trous (`exo_trous.py`)** : la structure algorithmique est guidée avec des `...` :
+  ```python
+  def deux_meilleurs(scores):
+      max1 = None
+      max2 = ...
+      for v in scores:
+          if max1 is None or v > max1:
+              max2 = ...
+              max1 = ...
+      return ..., ...
+  ```
 
 ---
 
@@ -163,174 +177,154 @@ assert abs(moyenne - 13.0) < 0.01, "La moyenne n'est pas correcte"
 
 ```yaml
 ---
-hide: toc, navigation
+hide:
+    - navigation
+    - toc
 title: Titre de l'exercice
 ---
 ```
+*(Des métadonnées CodEx optionnelles comme `author`, `tags`, `difficulty` peuvent aussi être présentes).*
 
-### 3.2 Titre de la page
+### 3.2 Deux modèles de mise en page
 
-```markdown
-# Exercices d'entraînement sur les listes
-```
+#### Modèle 1 : Exercice unique type CodEx (ex: `bissextiles`, `deux-meilleurs`, `costumes`)
 
-### 3.3 Admonitions pour les exercices
-
-Chaque exercice doit être dans une admonition **pliable** `??? question` :
+L'énoncé est écrit directement dans la page, suivi des aides éventuelles, d'un bloc d'exemples déplié `???+ example "Exemples"` au format console Python (`pycon`), puis de l'IDE :
 
 ```markdown
-??? question "Exercice 1 : Titre de l'exercice"
-    Énoncé de l'exercice...
-    
-    {{ IDE('scripts/exo1') }}
-```
+---
+hide:
+    - navigation
+    - toc
+title: Années bissextiles
+---
 
-**Attention à l'indentation** : tout le contenu à l'intérieur de l'admonition
-doit être indenté de **4 espaces**.
+Énoncé de l'exercice...
 
-Pour un exercice déplié par défaut mais pliable :
-```markdown
-???+ question "Exercice 1 : Titre de l'exercice"
-```
+!!! warning "Contraintes"
 
-### 3.4 Sous-questions numérotées
+    On n'utilisera ni `max`, ni `min`, ni `sorted`.
 
-Quand un exercice a plusieurs sous-questions, utiliser des listes ordonnées
-Markdown (`1.`, `2.`, ...) avec un IDE après chaque question :
+??? tip "Aide"
 
-```markdown
-??? question "Exercice 1 : Les pays de l'UE"
-    Énoncé général de l'exercice...
-    
-    1. Première question ?
-    {{ IDE('scripts/ex1_1') }}
+    Indice ou rappel de cours replié par défaut...
 
-    2. Deuxième question ?
-    {{ IDE('scripts/ex1_2') }}
+???+ example "Exemples"
 
-    3. Troisième question ?
-    {{ IDE('scripts/ex1_3') }}
-```
-
-### 3.5 Blocs de code dans l'énoncé
-
-Pour montrer des données (listes, exemples) dans l'énoncé sans qu'elles soient
-exécutables :
-
-```markdown
-    ```python
-    ma_liste = [1, 2, 3, 4, 5]
+    ```pycon title=""
+    >>> ma_fonction(2020)
+    True
+    >>> ma_fonction(2022)
+    False
     ```
+
+{{ IDE('exo', MAX=1000) }}
 ```
+
+#### Modèle 2 : Exercice progressif à plusieurs questions / fiche d'entraînement (ex: `gestion-rpg`, `course_cycliste`, `entrainement-listes`)
+
+Un contexte général en haut de page, puis chaque question dans une admonition pliable `??? question "..."` (tout le contenu interne doit être **indenté de 4 espaces**) :
+
+```markdown
+---
+hide:
+    - navigation
+    - toc
+title: Combat RPG
+---
+
+Contexte général de l'exercice...
+
+??? question "1. Force de frappe"
+
+    Énoncé de la question 1...
+
+    ```pycon
+    >>> calculer_puissance(80, 20)
+    100
+    ```
+
+    {{ IDE('exo1', MAX=1000) }}
+
+??? question "2. Réduction des dégâts"
+
+    Énoncé de la question 2...
+
+    {{ IDE('exo2', MAX=1000) }}
+```
+
+### 3.3 Diagrammes, formules et coloration inline
+
+- **Code Python inline coloré** : utiliser `#!py True`, `#!py None`, `#!py x % 2 == 0`.
+- **Formules mathématiques LaTeX** : `$d = v \times t$` (inline) ou `$$ \text{Puissance} = \text{Force} + \text{Bonus} $$` (bloc).
+- **Organigrammes Mermaid** : utiliser un bloc ```` ```mermaid ```` (`flowchart LR` ou `graph LR`) pour illustrer un algorithme conditionnel ou une boucle.
+  - *Bonnes pratiques Mermaid pour éviter les erreurs de parsing* :
+    - Éviter d'imbriquer des parenthèses dans un nœud stadium : préférer `Start("Début")` à `Start(["Début (texte)"])`.
+    - Pour les losanges de décision `{...}`, éviter les symboles bruts `>` ou `%` non protégés.
+    - Utiliser des nœuds de convergence circulaires `Next(("Passer au suivant"))` pour reboucler proprement.
+
 
 ---
 
-## 4. Macros IDE disponibles
+## 4. Macros disponibles dans le projet
 
 ### 4.1 `{{ IDE(...) }}` — Macro principale
 
-```markdown
-{{ IDE('scripts/exo1') }}
-```
-
-Le chemin est relatif au dossier de la page `index.md`, **sans l'extension `.py`**.
-
-**Paramètres courants :**
-
-| Paramètre | Type | Description |
-|:-----------|:-----|:------------|
-| `MAX` | int | Nombre max de tentatives avant de révéler la correction. `1000` = quasi-infini. Par défaut : `5`. |
-| `SANS` | str | Fonctions/modules interdits, séparés par des virgules. Ex : `SANS="sum, max, min"`. Pour interdire une syntaxe AST : `SANS="AST: for"`. |
-| `STD_KEY` | str | Clé de chiffrement pour les sections `corr`/`secrets`. |
-| `ID` | str | Identifiant unique si plusieurs IDE partagent le même nom sur une page. |
-| `TERM_H` | int | Hauteur du terminal (en lignes). Par défaut : `10`. |
-| `MIN_SIZE` | int | Hauteur minimum de l'éditeur (en lignes). Par défaut : `3`. |
-| `MAX_SIZE` | int | Hauteur maximum de l'éditeur (en lignes). Par défaut : `30`. |
-
-**Exemples :**
+> **Toujours préciser `MAX=1000`** pour laisser un nombre d'essais infini aux élèves.
 
 ```markdown
 {{ IDE('exo', MAX=1000) }}
-{{ IDE('scripts/exo2', SANS="sorted, max, sum, min") }}
+{{ IDE('scripts/exo2', MAX=1000, SANS="sorted, max, sum, min") }}
 {{ IDE('exo4', STD_KEY="1234", MAX=1000) }}
 ```
 
-### 4.2 `{{ IDE_versions(...) }}` — Versions multiples
+- **1er argument** : chemin relatif vers le script Python depuis le dossier contenant `index.md`, **sans l'extension `.py`**.
+- **Paramètres utiles** :
+  - `MAX=1000` : **(Obligatoire)** Nombre d'essais quasi-infini avant de pouvoir révéler la solution sans réussir.
+  - `SANS="..."` : Fonctions, méthodes (`.sort`), modules ou constructions AST (`AST: for`) interdits, séparés par des virgules.
+  - `STD_KEY="..."` : Clé autorisant l'utilisation de `terminal_message(STD_KEY, ...)` dans les sections cachées.
+  - `MODE="no_reveal"` / `"no_valid"` / `"delayed_reveal"` / `"revealed"` : Contrôle le mode de validation/révélation (par défaut : validation standard avec tests et révélation à la réussite).
+  - `TERM_H=10` : Hauteur du terminal en nombre de lignes.
+  - `MIN_SIZE=3`, `MAX_SIZE=30` : Bornes de hauteur de l'éditeur en lignes.
+  - `TEST="..."` : Contrôle l'exécution lors des tests globaux du site (`include: site`).
 
-Crée des onglets avec plusieurs versions d'un même exercice (version vide /
-version à trous) :
+### 4.2 `{{ IDE_versions(...) }}` (ou `double_IDE` / `IDE_double`) — Onglets multi-versions
 
-```markdown
-{{ IDE_versions('exo_a', 'exo_b', preferred=2, MAX=1000) }}
-```
-
-- `preferred` : numéro (1-indexé) de la version recommandée.
-- Alias : `{{ double_IDE(...) }}` et `{{ IDE_double(...) }}`.
-
-### 4.3 `{{ alien_IDE(...) }}` — Exercices Alien Python
-
-```markdown
-{{ alien_IDE(5, MAX=1000) }}
-```
-
-- `num` : numéro de l'exercice (pointe vers `scripts/exo{num}.py`).
-- `grille` : `True`/`False` pour afficher ou non la grille attendue.
-
-### 4.4 `{{ alien_dessin(...) }}` — Dessin Alien (lecture seule)
+Permet de proposer côte à côte une version vide et une version à trous :
 
 ```markdown
-{{ alien_dessin(1) }}
+{{ IDE_versions('exo_vide', 'exo_trous', preferred=2, MAX=1000) }}
 ```
+- Par défaut, l'onglet 1 s'intitule `"Version vide"` et l'onglet 2 `"Version à trous"`.
+- `preferred=1` ou `preferred=2` ajoute une icône cible sur la version recommandée.
+- On peut personnaliser les titres avec `title1="..."`, `title2="..."`.
 
-Affiche un dessin alien sans éditeur interactif.
+### 4.3 Macros CodEx de remarques et d'interdictions
+
+- `{{ interdiction("sum, max, min") }}` : Génère automatiquement une admonition `???+ warning` listant proprement les fonctions interdites.
+- `{{ remarque('assertion') }}` : Insère le fichier `remarques/assertion.md` expliquant le fonctionnement du mot-clé `assert`.
+
+### 4.4 Macros graphiques (`figure`, `alien_IDE`, `alien_dessin`, `run`)
+
+- **P5 / Matplotlib / Pixel Art** :
+  - `{{ run('scripts/dessin1') }}` exécute un script automatiquement au chargement.
+  - `{{ figure("id_cible", admo_title="Titre") }}` crée la zone d'affichage graphique associée.
+- **Alien Python** :
+  - `{{ alien_dessin(1) }}` : question où l'élève clique sur les cases de la grille (section `PYODIDE:dessin`).
+  - `{{ alien_IDE(5, MAX=1000) }}` : question où l'élève code le déplacement de l'alien.
 
 ---
 
 ## 5. Intégration d'images
 
-### 5.1 Images statiques
-
-Placer les images dans un dossier `images/` (ou à la racine du dossier exercice)
-et les référencer en Markdown :
+Placer les images dans `images/` (ou dans le dossier de l'exercice) et utiliser `attr_list` avec la classe `.center` :
 
 ```markdown
-![Description](images/schema.png){: width=75% .center }
+![Texte alternatif](images/schema.png){ width=50% .center }
 ```
 
-Pour centrer une image avec `attr_list` :
-
+Pour mettre deux images côte à côte :
 ```markdown
-![Description](image.png){: style="display: block; margin: 0 auto" }
-```
-
-La classe CSS `.center` est aussi disponible dans le projet :
-
-```markdown
-![Description](images/schema.png){ .center }
-```
-
-### 5.2 Images issues d'un notebook Jupyter
-
-Pour extraire les images embarquées dans un notebook `.ipynb` :
-
-```python
-import json, base64, os
-
-with open("notebook.ipynb", 'r', encoding='utf-8') as f:
-    notebook = json.load(f)
-
-for cell in notebook['cells']:
-    if 'attachments' in cell:
-        for filename, attachment in cell['attachments'].items():
-            if 'image/png' in attachment:
-                data = base64.b64decode(attachment['image/png'])
-                with open(os.path.join("output_dir", filename), 'wb') as img_f:
-                    img_f.write(data)
-```
-
-### 5.3 Images côte à côte
-
-```html
 <div style="display: flex; justify-content: space-around; margin: auto;">
     ![Image 1](images/img1.svg){width=100%}
     ![Image 2](images/img2.gif){width=65%}
@@ -339,92 +333,46 @@ for cell in notebook['cells']:
 
 ---
 
-## 6. Ajouter la page dans la navigation
+## 6. Ajouter l'exercice dans la navigation
 
-### 6.1 Lien dans la page de catégorie
-
-Ajouter un lien dans la page thématique correspondante (ex : `docs/2M/listes-python.md`) :
-
-```markdown
-- [ ] [Titre de l'exercice](nom-exercice/index.md)
-```
-
-### 6.2 Carte dans la page d'accueil du niveau (optionnel)
-
-Si l'exercice mérite d'apparaître directement sur la page d'accueil du niveau
-(`docs/2M/index.md`), ajouter une carte dans le `<div class="grid cards">` :
-
-```markdown
--   :material-icon: **Titre**
-
-    ---
-
-    Description courte.
-
-    [:octicons-arrow-right-24: Commencer](nom-exercice/index.md)
-```
-
-### 6.3 Structure de navigation
-
-La navigation globale est gérée par `mkdocs.yml` avec seulement les onglets
-principaux. La navigation interne est gérée automatiquement par le plugin
-`awesome-pages` et les liens manuels dans les pages hub.
+1. **Page thématique du niveau** (ex: `docs/1M/conditions.md`, `docs/1M/fonctions.md`, `docs/1M/boucle-while.md`, `docs/1M/variables.md`, `docs/2M/listes-python.md`) :
+   Ajouter une entrée dans la liste de tâches :
+   ```markdown
+   - [ ] [Titre de l'exercice](nom-exercice/index.md)
+   ```
+2. **Page d'accueil du niveau** (`docs/1M/index.md` ou `docs/2M/index.md`) : uniquement s'il s'agit d'une nouvelle catégorie ou d'un grand TP autonome, ajouter une carte dans `<div class="grid cards" markdown>`.
 
 ---
 
-## 7. Checklist de création d'un exercice
+## 7. Checklist de création et de vérification
 
-Voici la checklist complète à suivre pour créer un exercice :
-
-- [ ] **Créer le dossier** : `docs/<niveau>/<nom-exercice>/`
-- [ ] **Créer le sous-dossier scripts** : `scripts/` (ou `pythons/`)
-- [ ] **Créer les fichiers Python** pour chaque question :
-    - Section `env` si des données doivent être prédéfinies
-    - Section `code` avec le squelette pour l'élève
-    - Section `corr` avec la solution complète
-    - Section `secrets` avec les tests cachés (valeurs en dur, pas d'algorithme)
-- [ ] **Créer `index.md`** :
-    - Frontmatter : `hide: toc, navigation` + `title:`
-    - Titre `#`
-    - Admonitions pliables `??? question "Exercice N : Titre"`
-    - Questions numérotées `1.`, `2.`, ... si plusieurs sous-questions
-    - Appels `{{ IDE('scripts/exoN') }}` correctement indentés (4 espaces)
-- [ ] **Ajouter les images** si nécessaire (dossier `images/` ou racine)
-- [ ] **Ajouter le lien** dans la page de catégorie (ex : `listes-python.md`)
-- [ ] **Tester** avec `mkdocs serve` :
-    - La page compile sans erreur
-    - Les IDE s'affichent correctement
-    - Les corrections s'affichent (bouton ampoule)
-    - Les tests de validation fonctionnent
-    - Les images sont visibles et centrées
+- [ ] **Dossier créé** : `docs/<niveau>/<nom-exercice>/`
+- [ ] **Scripts `.py` complets** :
+  - `# --------- PYODIDE:env --------- #` (si données ou fonctions prédéfinies)
+  - `# --------- PYODIDE:code --------- #` (squelette élève avec `...`)
+  - `# --------- PYODIDE:corr --------- #` (solution complète et propre)
+  - `# --------- PYODIDE:tests --------- #` (assertions publiques correspondant aux exemples de l'énoncé)
+  - `# --------- PYODIDE:secrets --------- #` (assertions cachées avec cas limites, tests aléatoires et messages d'erreur `f"Erreur avec ..."` ; **aucun appel aux fonctions interdites par `SANS`**)
+- [ ] **Correction détaillée (optionnel mais recommandé)** : fichier `<nom>_REM.md` pour expliquer les subtilités ou montrer les solutions alternatives.
+- [ ] **Page `index.md` créée** :
+  - Frontmatter avec `hide: [navigation, toc]` et `title:`
+  - Énoncé clair + exemples dans `???+ example "Exemples"` avec bloc `pycon`
+  - Tous les appels `{{ IDE(..., MAX=1000) }}` contiennent bien **`MAX=1000`** et sont **sans extension `.py`**
+  - Indentation de **4 espaces** respectée à l'intérieur des admonitions `??? question`
+- [ ] **Lien ajouté** dans la page thématique (`docs/1M/...` ou `docs/2M/...`)
+- [ ] **Vérification locale** (`mkdocs build` ou `mkdocs serve`) : aucune erreur de build, les tests publics et secrets passent avec le code de `corr`.
 
 ---
 
-## 8. Erreurs fréquentes à éviter
+## 8. Dépannage & compatibilité technique
 
-| Erreur | Cause | Solution |
-|:-------|:------|:---------|
-| `secrets without corr section` | Section `secrets` sans section `corr` | Ajouter une section `corr` (même minimale avec `pass`) |
-| IDE non affiché | Mauvaise indentation dans l'admonition | Vérifier que `{{ IDE(...) }}` est indenté de 4 espaces |
-| Solution visible dans les tests | Algorithme dans `secrets` | Remplacer par des valeurs en dur ou des assertions simples |
-| Image non trouvée | Chemin relatif incorrect | Le chemin est relatif à `index.md` |
-| Extension `.py` dans le chemin IDE | `{{ IDE('scripts/exo.py') }}` | Retirer l'extension : `{{ IDE('scripts/exo') }}` |
-| `FORBIDDEN: don't use ...` | Fonction interdite par `SANS=` utilisée dans `secrets` ou `env` | Ne pas utiliser la fonction dans les tests cachés (utiliser des valeurs en dur ou algorithmes simples) |
+### Conflit Ace Editor / Mermaid.js (`Wae.default.extend is not a function`)
+- **Problème** : Ace Editor (l'éditeur de code des IDE Pyodide) a impérativement besoin de `window.define` pour charger dynamiquement le module de coloration syntaxique Python (`mode-python.js`). À l'inverse, le bundle UMD de Mermaid 11 contient un sous-module (`fastdom`) qui crashe si `window.define` existe au moment de son exécution (`Uncaught TypeError: Wae.default.extend is not a function`). De plus, le rendu natif de `mkdocs-material` (dans un Shadow DOM) vérifie de manière synchrone `typeof mermaid !== "undefined"` au démarrage de `bundle.js`.
+- **Solution propre adoptée (le « sandwich synchrone »)** :
+  - Dans `overrides/hooks/libsAfter.html` (et en secours dans `overrides/partials/header.html`), juste après le chargement d'Ace Editor dans `<head>` :
+    1. On sauvegarde et masque temporairement `window.define` (`window._ace_define = window.define; window.define = undefined;`).
+    2. On charge de manière **synchrone** `https://cdn.jsdelivr.net/npm/mermaid@11.16.1/dist/mermaid.min.js` (qui crée `window.mermaid` sans erreur).
+    3. On restaure **immédiatement** `window.define = window._ace_define;` dans la balise `<script>` suivante.
+  - Ainsi, quand `mkdocs-material` initialise la page, `window.mermaid` est déjà prêt pour le rendu natif des diagrammes, et quand les IDE Pyodide s'initialisent dans le `<body>`, `window.define` est de nouveau présent pour charger la coloration syntaxique Python (`mode-python.js`).
 
----
 
-## 9. Transformer un notebook Jupyter en exercices
-
-Pour convertir un fichier `.ipynb` en exercices interactifs :
-
-1. **Lire le notebook** et identifier les cellules Markdown (énoncés) et Code
-   (squelettes + assertions).
-2. **Extraire les images** embarquées (voir section 5.2).
-3. **Pour chaque exercice** :
-    - Créer un fichier `.py` avec les sections Pyodide appropriées.
-    - Le code de la cellule d'initialisation → section `env`.
-    - Le squelette vide → section `code`.
-    - La solution → section `corr`.
-    - Les `assert` → section `secrets` (reformulés avec des valeurs en dur).
-4. **Créer la page `index.md`** avec les admonitions et les appels IDE.
-5. **Intégrer** dans la navigation du site.

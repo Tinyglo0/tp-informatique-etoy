@@ -12,4 +12,5 @@ title: Listes en Python
 - [ ] [Validation de mot de passe](validation_mdp/index.md)
 - [ ] [Les deux meilleurs](deux-meilleurs/index.md)
 - [ ] [Distribution de costumes](costumes/index.md)
+- [ ] [Algorithme de Luhn](luhn/index.md)
 <!-- - [ ] [Exercices d'entraînement (Chapitre 7)](entrainement-listes/index.md) -->

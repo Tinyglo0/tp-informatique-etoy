@@ -21,6 +21,18 @@
 -->
 
 <!-- Determine classes -->
+<script>
+  if (window.define) {
+    window._ace_define = window.define;
+    window.define = undefined;
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11.16.1/dist/mermaid.min.js"></script>
+<script>
+  if (window._ace_define) {
+    window.define = window._ace_define;
+  }
+</script>
 {% set class = "md-header" %}
 {% if "navigation.tabs.sticky" in features %}
   {% set class = class ~ " md-header--shadow md-header--lifted" %}
