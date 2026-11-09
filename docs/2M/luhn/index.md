@@ -47,9 +47,9 @@ Le calcul s'effectue en quatre étapes :
 
 ---
 
-## Organigramme de l'algorithme (à compléter)
+## Organigramme de l'algorithme
 
-Pour vous aider à concevoir votre programme, voici l'organigramme de fonctionnement. Plusieurs conditions et calculs contiennent des pointillés `...` : **à vous de les identifier avant de coder !**
+Pour vous aider à concevoir votre programme, voici l'organigramme de fonctionnement.
 
 ```mermaid
 flowchart LR
@@ -58,7 +58,7 @@ flowchart LR
     Init --> LoopCheck{"Reste-t-il des chiffres<br>à analyser dans la liste ?"}
     
     LoopCheck -- "Non (Fin de la boucle)" --> CheckModulo{"Le total se termine-t-il par 0 ?"}
-    LoopCheck -- "Oui (Chiffre à l'indice i)" --> CheckParite{"Faut-il doubler ce chiffre ?<br>Indice i pair ?"}
+    LoopCheck -- "Oui (Chiffre à l'indice i)" --> CheckParite{"Indice i pair ?<br>Faut-il doubler ce chiffre ?"}
     
     CheckParite -- "Non" --> SetSimple["Conserver le chiffre."]
     CheckParite -- "Oui" --> CalcDouble["Calculer le double."]
@@ -108,5 +108,11 @@ flowchart LR
     >>> est_valide("0043 6687 8348 5480")
     False
     ```
+??? tip "Aides sur les chaînes de caractères en Python"
+
+    Si `chaine` est une chaîne de caractères :
+
+    * `#!py chaine.isnumeric()` renvoie `#!py True` si `chaine` ne contient que des chiffres, `#!py False` dans le cas contraire.
+
 
 {{ IDE('exo', MAX=1000) }}

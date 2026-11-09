@@ -11,8 +11,8 @@ def est_valide(numero):
 
 
 # --- Programme interactif ---
-numero_carte = input("Entrez votre numéro de carte bancaire : ")
-if est_valide(numero_carte):
+numero_carte = ...
+if ... :
     print("Numéro de carte valide !")
 else:
     print("Numéro de carte invalide !")
